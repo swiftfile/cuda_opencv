@@ -1,16 +1,24 @@
-#include <opencv2/opencv.hpp>
-#include <opencv2/core/cuda.hpp>
-using namespace cv;
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <iostream>
 
-int main(){
-    Mat image = imread("file.png");
-    cuda::GpuMat image_gpu;
-    image_gpu .upload(image);
-    cuda::GpuMat result;
-//    cuda::threshold(image_gpu, result, 128, CV_THRESH_BINARY);
+int main(int argc, const char* argv[])
+{
+    // 画像データをファイルから読み込む
+    cv::Mat src = cv::imread("lena.jpg", cv::IMREAD_COLOR);
 
-    result.download(image);
-    imshow("WindowName", image);
-    waitKey ();
+    // 画像の読み込みに失敗したらエラー終了する
+    if(src.empty())
+    {
+        std::cerr << "Failed to open image file." << std::endl;
+        return -1;
+    }
 
+    cv::namedWindow("image", cv::WINDOW_AUTOSIZE);
+    cv::imshow("image", src);
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+
+    return 0;
 }
